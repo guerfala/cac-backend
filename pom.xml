@@ -10,10 +10,10 @@
         <version>3.2.5</version>
     </parent>
 
-    <groupId>com.caci</groupId>
-    <artifactId>caci-backend</artifactId>
+    <groupId>com.cac</groupId>
+    <artifactId>cac-backend</artifactId>
     <version>1.0.0</version>
-    <name>CACI Backend</name>
+    <name>CAC Backend</name>
 
     <properties>
         <java.version>17</java.version>

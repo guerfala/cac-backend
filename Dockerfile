@@ -7,8 +7,8 @@ RUN mvn clean package -DskipTests -B
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-RUN addgroup -S caci && adduser -S caci -G caci && mkdir -p /app/uploads && chown -R caci:caci /app
+RUN addgroup -S cac && adduser -S cac -G cac && mkdir -p /app/uploads && chown -R cac:cac /app
 COPY --from=build /app/target/*.jar app.jar
-USER caci
+USER cac
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]

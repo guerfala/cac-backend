@@ -18,5 +18,5 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /opt/caci
+            cd /opt/cac
             bash scripts/pull-deploy.sh backend
