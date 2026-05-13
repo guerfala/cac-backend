@@ -5,6 +5,7 @@ import com.cac.backend.entity.Photo;
 import com.cac.backend.repository.AlbumRepository;
 import com.cac.backend.repository.PhotoRepository;
 import com.cac.backend.service.FileStorageService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class AlbumController {
 
         Album album = Album.builder()
                 .titre(titre)
-                .date(date != null ? LocalDate.parse(date) : LocalDate.now())
+                .date(date != null && !date.isEmpty() ? LocalDate.parse(date) : LocalDate.now())
                 .build();
 
         if (couverture != null && !couverture.isEmpty()) {
@@ -67,12 +68,24 @@ public class AlbumController {
 
         return albumRepo.findById(id).map(album -> {
             album.setTitre(titre);
-            if (date != null) album.setDate(LocalDate.parse(date));
+            if (date != null && !date.isEmpty()) album.setDate(LocalDate.parse(date));
             if (couverture != null && !couverture.isEmpty()) {
                 fileService.delete(album.getCouverture());
                 try { album.setCouverture(fileService.store(couverture, "albums")); }
                 catch (IOException e) { throw new RuntimeException(e); }
             }
+            return ResponseEntity.ok(albumRepo.save(album));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    // ─── Changer la couverture depuis une photo existante ───
+    @PutMapping("/{id}/cover")
+    public ResponseEntity<Album> updateCover(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+
+        return albumRepo.findById(id).map(album -> {
+            album.setCouverture(body.get("couverture"));
             return ResponseEntity.ok(albumRepo.save(album));
         }).orElse(ResponseEntity.notFound().build());
     }
